@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Note from './components/Note';
+import NoteList from './components/Note';
 
 ReactDOM.render(
     <div>
-        <h1>Hello World </h1>,
-        <Note/>
+        <h1>Hello World </h1>
+        <NoteList />
     </div>
     , document.getElementById("app"));
