@@ -5,10 +5,11 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Note from './Note';
 import {getDashbaord, createNewNote, deleteNote, editNote} from '../action/dashboard';
+import selectNotes from '../selector/notes';
 
 
 
-const NoteList = ({getDashbaord, createNewNote, deleteNote, editNote}) => {
+const NoteList = ({getDashbaord, createNewNote, deleteNote, editNote, notes}) => {
     const [note, setNote] = useState("");
     const [noteVersion, setVersion] = useState(0);
     const [noteTitle, setTitle] = useState();
@@ -44,12 +45,11 @@ const NoteList = ({getDashbaord, createNewNote, deleteNote, editNote}) => {
     }
 
     const handleSave = async () =>{
-        console.log(noteVersion);
         await editNote(noteId, noteVersion, noteTitle, noteContent, moment().format("YYYY-MM-DD hh:mm:ss") )
         handleClose();
         await getDashbaord();
     }
-
+      // console.log(notes);
     return(
         <div>
             <div>
@@ -58,7 +58,7 @@ const NoteList = ({getDashbaord, createNewNote, deleteNote, editNote}) => {
                 }}>Create New Note</Button>
             </div>
             {note.length > 0 ? (
-                note.map((val)=>{
+              note.map((val)=>{
                     return(<div>
                             <Note customEdit={customEdit} customDelete={customDelete} key={val.idnotes} {...val}/>
                         </div>)
@@ -87,7 +87,7 @@ const mapDispatchToProps = (dispatch) =>({
     deleteNote: (idnotes)=>dispatch(deleteNote(idnotes)),
     editNote:(idnotes,version, title, content, last_modified)=>dispatch(editNote(idnotes,version, title, content, last_modified))
   })
-  const mapStateToProps = (state)=>({
-    notes: selectNotes(state.dashboardInfo, state.sortBy)
+  const mapStateToProps  = async (state) => await({
+    notes: selectNotes(state.dashboardReducer.dashboardInfo, state.filterReducer.sortBy),
   })
 export default connect(mapStateToProps, mapDispatchToProps)(NoteList);

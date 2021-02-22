@@ -14,7 +14,7 @@ const NoteFilter = ({filters, sortByTitle, sortByModified, sortByCreated}) =>{
             sortByModified();
         }
     }
-
+    console.log(filters)
     return(
         <div>
             <select className="select" value={filters} 
@@ -32,6 +32,6 @@ const mapDispatchToProps = (dispatch) =>({
     sortByTitle: () => dispatch(sortByTitle())
   })
 const mapStateToProps = (state) =>({
-    filters: state.sortBy
+    filters: state.filterReducer.sortBy
 })
 export default connect(mapStateToProps, mapDispatchToProps)(NoteFilter);
