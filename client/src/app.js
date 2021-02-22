@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import NoteList from './components/Note';
+import NoteList from './components/NoteList';
+import configureStore from './store/configureStore';
+import { Provider } from 'react-redux';
+
+const store = configureStore();
 
 ReactDOM.render(
-    <div>
+    <Provider store={store}>
         <h1>Hello World </h1>
         <NoteList />
-    </div>
+    </Provider>
     , document.getElementById("app"));

@@ -8,9 +8,11 @@
     "dev-server": "webpack-dev-server",
     "build": "webpack"
   },
+  "proxy": "http://localhost:5000",
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "babel": "^6.23.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
@@ -27,6 +29,7 @@
     "react-router-dom": "^4.2.2",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "thunk": "0.0.1",
     "webpack": "^3.1.0",
     "webpack-dev-server": "^2.5.1"
   }
