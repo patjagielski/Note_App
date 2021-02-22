@@ -55,7 +55,7 @@ var connection = mysql.createConnection({
     const title = req.body.title;
     const content = req.body.content;
     const last_modified = req.body.last_modified;
-    console.log(id)
+    console.log(version)
 
     connection.query("UPDATE notes SET version=?, title=?, content=?, last_modified=? WHERE idnotes=?", [version,title,content, last_modified, id], (err, rows)=>{
       if(err) throw err

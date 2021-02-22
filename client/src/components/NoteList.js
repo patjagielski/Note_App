@@ -37,14 +37,14 @@ const NoteList = ({getDashbaord, createNewNote, deleteNote, editNote}) => {
 
     const customEdit = (idnotes,version, title, content, last_modified) =>{
         setId(idnotes);
-        setVersion(version);
+        setVersion(version+1);
         setTitle(title);
         setContent(content);
         handleShow();
     }
 
     const handleSave = async () =>{
-        setVersion(prev => prev+1);
+        console.log(noteVersion);
         await editNote(noteId, noteVersion, noteTitle, noteContent, moment().format("YYYY-MM-DD hh:mm:ss") )
         handleClose();
         await getDashbaord();
@@ -87,4 +87,7 @@ const mapDispatchToProps = (dispatch) =>({
     deleteNote: (idnotes)=>dispatch(deleteNote(idnotes)),
     editNote:(idnotes,version, title, content, last_modified)=>dispatch(editNote(idnotes,version, title, content, last_modified))
   })
-export default connect(undefined, mapDispatchToProps)(NoteList);
+  const mapStateToProps = (state)=>({
+    notes: selectNotes(state.dashboardInfo, state.sortBy)
+  })
+export default connect(mapStateToProps, mapDispatchToProps)(NoteList);
