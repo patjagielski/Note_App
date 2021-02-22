@@ -16,11 +16,13 @@ app.use(cors());
   })
 
   app.post("/addNotes", (req, res)=>{
-    notesController.addNotes(res);
+    const date_created = req.body.date_created;
+    console.log(date_created);
+    notesController.addNotes(date_created,res);
   })
 
   app.post("/removeNote", (req, res)=>{
-    const id = req.body.idnotes;
+    const id =req.body.idnotes;
     notesController.removeNote(id, res);
   })
 
@@ -29,8 +31,7 @@ app.use(cors());
     const version = req.body.version;
     const title = req.body.title;
     const content = req.body.content;
-    const last_modified = req.body.last_modified;
-    notesController.editNote(version, title, content, last_modified, id, res);
+    notesController.editNote(version, title, content, id, res);
   })
 
 const port = process.env.PORT || 5000;

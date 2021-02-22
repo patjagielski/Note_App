@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import moment from 'moment';
 
 export const setDashboard = (dashboardInfo) => ({
     type: 'SET_DASHBOARD',
@@ -21,8 +22,8 @@ export const getDashbaord = () =>{
         }
 }
 
-export const createNewNote = () => {
-    const result = Axios.post("http://localhost:5000/addNotes")
+export const createNewNote = (date) => {
+    const result = Axios.post("http://localhost:5000/addNotes",{ date_created:date})
                 .then((res)=>{
                     return res
                 })
@@ -41,14 +42,13 @@ export const deleteNote = (idnotes) =>{
     }
 }
 
-export const editNote = (idnotes,version, title, content, last_modified) => {
+export const editNote = (idnotes,version, title, content) => {
     return(dispatch, getState)=>{
         return Axios.patch("http://localhost:5000/editNote",{
             idnotes,
             version, 
             title, 
-            content,
-            last_modified
+            content
         }).then((res)=>{
             console.log("edited!")
         })

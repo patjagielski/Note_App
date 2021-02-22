@@ -29,14 +29,15 @@ const NoteList = ({getDashbaord, createNewNote, deleteNote, editNote, notes}) =>
     }, [note]);
     
     const handleOnClick= async()=>{
-        const result = await createNewNote();
+      const date =moment().format('YYYY-MM-DD, HH:mm:ss');
+      console.log(date)
+      await createNewNote(date);
     }
     const customDelete = async (idnotes) =>{
-        console.log(idnotes)
         await deleteNote(idnotes);
     }
 
-    const customEdit = (idnotes,version, title, content, last_modified) =>{
+    const customEdit = (idnotes,version, title, content) =>{
         setId(idnotes);
         setVersion(version+1);
         setTitle(title);
@@ -45,7 +46,7 @@ const NoteList = ({getDashbaord, createNewNote, deleteNote, editNote, notes}) =>
     }
 
     const handleSave = async () =>{
-        await editNote(noteId, noteVersion, noteTitle, noteContent, moment().format("YYYY-MM-DD hh:mm:ss") )
+        await editNote(noteId, noteVersion, noteTitle, noteContent,)
         handleClose();
         await getDashbaord();
     }
@@ -83,9 +84,9 @@ const NoteList = ({getDashbaord, createNewNote, deleteNote, editNote, notes}) =>
 }
 const mapDispatchToProps = (dispatch) =>({
     getDashbaord: ()=>dispatch(getDashbaord()),
-    createNewNote: ()=>dispatch(createNewNote()),
+    createNewNote: (date)=>dispatch(createNewNote(date)),
     deleteNote: (idnotes)=>dispatch(deleteNote(idnotes)),
-    editNote:(idnotes,version, title, content, last_modified)=>dispatch(editNote(idnotes,version, title, content, last_modified))
+    editNote:(idnotes,version, title, content)=>dispatch(editNote(idnotes,version, title, content))
   })
   const mapStateToProps  = async (state) => await({
     notes: selectNotes(state.dashboardReducer.dashboardInfo, state.filterReducer.sortBy),

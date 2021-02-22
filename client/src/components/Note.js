@@ -19,7 +19,7 @@ const Note = ({customEdit, customDelete, idnotes, version, title, date_created, 
     
     const handleEdit = (e)=>{
       e.preventDefault();
-      customEdit(idnotes,version, title, content, last_modified)
+      customEdit(idnotes,version, title, content)
       
     }
 
@@ -27,7 +27,7 @@ const Note = ({customEdit, customDelete, idnotes, version, title, date_created, 
         <div>
             <ListGroup>
                 <ListGroup.Item><Button variant="dark" onClick={handleShow}>
-                    Title: {title} Date Created:{date_created} Date Modified: {last_modified} Date Created: {date_created}
+                    Title: {title} Date Created:{date_created} Date Modified: {last_modified}
                     </Button>
                     <Button onClick={handleEdit} variant="success">Edit</Button>
                     <Button onClick={handleOnClick} variant="danger">X</Button>
