@@ -6,18 +6,32 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 
 
-const Note = ({idnotes, version, title, date_created, last_modified, content}) =>{
+const Note = ({customEdit, customDelete, idnotes, version, title, date_created, last_modified, content }) =>{
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const handleOnClick = (e) => {
+      e.preventDefault();
+      customDelete(idnotes)
+    }
     
+    const handleEdit = (e)=>{
+      e.preventDefault();
+      customEdit(idnotes,version, title, content, last_modified)
+      
+    }
+
     return(
         <div>
             <ListGroup>
                 <ListGroup.Item><Button variant="dark" onClick={handleShow}>
                     Title: {title} Date Created:{date_created} Date Modified: {last_modified}
-                    </Button></ListGroup.Item>
+                    </Button>
+                    <Button onClick={handleEdit} variant="success">Edit</Button>
+                    <Button onClick={handleOnClick} variant="danger">X</Button>
+                    </ListGroup.Item>
             </ListGroup>
 
             <Modal show={show} onHide={handleClose}>
@@ -39,6 +53,6 @@ const Note = ({idnotes, version, title, date_created, last_modified, content}) =
 }
 
 // const mapDispatchToProps = (dispatch) =>({
-//   getDashbaord: ()=>dispatch(getDashbaord())
+//   deleteNote: ()=>dispatch(deleteNote())
 // })
 export default connect(undefined, undefined)(Note);

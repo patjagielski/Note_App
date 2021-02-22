@@ -4,6 +4,8 @@ export default(state={}, action)=>{
             return{
                 dashboardInfo: action.dashboardInfo
             }
+        case 'REMOVE_NOTE':
+            return state.dashboardInfo.filter((val)=> val !== action.idnotes)
         default:
             return state;
     }
