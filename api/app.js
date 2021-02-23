@@ -33,6 +33,11 @@ app.use(cors());
     const content = req.body.content;
     notesController.editNote(version, title, content, id, res);
   })
+  
+  app.get("/versionHistory",(req,res)=>{
+    const id = req.query.id;
+    notesController.versionHistory(id,res);
+  })
 
 const port = process.env.PORT || 5000;
 app.listen(port);

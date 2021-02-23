@@ -54,3 +54,13 @@ export const editNote = (idnotes,version, title, content) => {
         })
     }
 }
+
+export const versionHistory = (idnotes) => {
+    return(dispatch, getState)=>{
+        console.log(idnotes);
+        return Axios.get(`http://localhost:5000/versionHistory?id=${idnotes}`)
+        .then((res)=>{
+            return res.data;
+        })
+    }
+}

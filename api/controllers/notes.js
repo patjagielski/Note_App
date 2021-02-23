@@ -58,7 +58,6 @@ exports.addNotes = function addNotes(date_created, res) {
  const defaultContent = 'NOTE CONTENT GOES HERE';
  const defaultTitle = 'NOTE';
  const defaultLastMod = moment().format('YYYY-MM-DD, HH:mm:ss');
- console.log(defaultLastMod);
   connection.query("INSERT INTO	Notes( version, title, date_created, last_modified, content) VALUES ( 0, ?, ?, ?, ?)", [defaultTitle,date_created,defaultLastMod,defaultContent], (err, rows) => {
     if (err)
       throw err;
@@ -71,6 +70,15 @@ exports.addNotes = function addNotes(date_created, res) {
     else insertIntoHistory(rows[0].id, 0, defaultTitle,date_created,defaultLastMod,defaultContent, idaction);
   })})
   
+}
+
+exports.versionHistory = function versionHistory(id, res){
+  connection.query("select t_n.idnotes,t_n.version,t_n.title,t_n.date_created,t_n.last_modified,t_n.content,t_a.action_type from notes_history t_n join action_types t_a on t_n.idaction=t_a.idaction WHERE t_n.idnotes = ?;", [id], (err, rows) => {
+    if (err)
+      throw err;
+    else
+      res.send(rows);
+  });
 }
 
 function insertIntoHistory(id, version, title,date_created,last_modified,content, action) {
