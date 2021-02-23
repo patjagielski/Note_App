@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require("cors");
 const app = express();
@@ -12,17 +11,16 @@ app.use(cors());
   app.get("/getNotes", (req, res)=>{
   
     notesController.getNotes(res);
-
+    
   })
 
   app.post("/addNotes", (req, res)=>{
     const date_created = req.body.date_created;
-    console.log(date_created);
     notesController.addNotes(date_created,res);
   })
 
   app.post("/removeNote", (req, res)=>{
-    const id =req.body.idnotes;
+    const id = req.body.idnotes;
     notesController.removeNote(id, res);
   })
 
@@ -41,7 +39,9 @@ app.use(cors());
 
 const port = process.env.PORT || 5000;
 app.listen(port);
-console.log("app is listening to " + port)
+// console.log("app is listening to " + port)
+module.exports = app
+
 
 
 

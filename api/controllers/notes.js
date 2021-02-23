@@ -6,17 +6,10 @@ const connection = simpleMysql.createConnection();
 exports.getNotes = function getNotes(res) {
   connection.query("SELECT * FROM notes", (err, rows) => {
     if (err)
-      throw err;
-    else
-      res.send(rows);
-  });
-}
-function getSpecificNote(id, callback) {
-  connection.query("SELECT * FROM notes WHERE idnotes=?",[id], (err, rows) => {
-    if (err)
-      throw err;
-    else
-      callback(rows[0]);
+      res.json({"message":500})
+    else{
+      res.status(200).send(rows);
+    }
   });
 }
 
@@ -24,15 +17,19 @@ exports.editNote = function editNote(version, title, content, id, res) {
  
     connection.query("UPDATE notes SET version=?, title=?, content=?, last_modified=NOW() WHERE idnotes=?", [version, title, content, id], (err, rows) => {
       if (err)
-        throw err;
-      else
-        res.send(rows);
+        res.json({"message":500})
+      else{
+        
         getSpecificNote(id,(result)=>{
-        const objectToUpdate = result;
-        getAction('UPDATED',(idaction)=>{
-        insertIntoHistory(id, objectToUpdate.version, objectToUpdate.title,objectToUpdate.date_created,objectToUpdate.last_modified,objectToUpdate.content, idaction);
+          console.log(getSpecificNote)
+          const objectToUpdate = result;
+          getAction('UPDATED',(idaction)=>{
+            insertIntoHistory(id, objectToUpdate.version, objectToUpdate.title,objectToUpdate.date_created,objectToUpdate.last_modified,objectToUpdate.content, idaction);
+            
         });
       });
+    }
+    res.status(200).send(rows);
     });
     
 }
@@ -42,9 +39,9 @@ exports.removeNote = function removeNote(id,res) {
     const objectToDelete = result;
     connection.query("DELETE FROM Notes where idnotes = ?", [id], (err, rows) => {
       if (err)
-        throw err;
+        res.json({"message":500})
       else
-        res.send(rows);
+        res.status(200).send(rows);
         getAction('DELETED',(idaction)=>{
           insertIntoHistory(id, objectToDelete.version, objectToDelete.title,objectToDelete.date_created,objectToDelete.last_modified,objectToDelete.content, idaction);
         })
@@ -60,16 +57,17 @@ exports.addNotes = function addNotes(date_created, res) {
  const defaultLastMod = moment().format('YYYY-MM-DD, HH:mm:ss');
   connection.query("INSERT INTO	Notes( version, title, date_created, last_modified, content) VALUES ( 0, ?, ?, ?, ?)", [defaultTitle,date_created,defaultLastMod,defaultContent], (err, rows) => {
     if (err)
-      throw err;
-    else
-      res.send(rows);
+      res.json({"message":500})
+    else{
+      res.json({"message":200});
+    }
+    
   });
   getAction('CREATED',(idaction)=>{
     connection.query("SELECT MAX(idnotes) as id from notes",(err, rows)=>{
     if(err) throw err
     else insertIntoHistory(rows[0].id, 0, defaultTitle,date_created,defaultLastMod,defaultContent, idaction);
-  })})
-  
+  })});
 }
 
 exports.versionHistory = function versionHistory(id, res){
@@ -81,19 +79,26 @@ exports.versionHistory = function versionHistory(id, res){
   });
 }
 
-function insertIntoHistory(id, version, title,date_created,last_modified,content, action) {
+function insertIntoHistory(id, version=0, title='', date_created='', last_modified='', content='', action=0) {
   connection.query("INSERT INTO	notes_history(idnotes,version, title, date_created, last_modified, content, idaction) VALUES (?,?,?,?,?,?,?)", [id, version, title,date_created, last_modified, content, action], (err, rows) => {
     if (err)
       throw err;
-    else
-      console.log("added to note history");
+    
   });
-}
+};
 
-function getAction(action, callback){
+function getAction(action = 0, callback){
    connection.query("select idaction as id from action_types where action_type=?;",[action], (err, rows)=>{
      return callback(rows[0].id);
-   })}
+   })
+  };
 
-
-   //select from notes_history
+  function getSpecificNote(id = 0, callback) {
+  connection.query("SELECT * FROM notes WHERE idnotes=?",[id], (err, rows) => {
+    if (err)
+      throw err;
+    else
+      return callback(rows[0]);
+  });
+  };
+  
