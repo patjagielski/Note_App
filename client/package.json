@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev-server": "webpack-dev-server",
+    "start": "webpack-dev-server",
     "build": "webpack"
   },
   "proxy": "http://localhost:5000",
